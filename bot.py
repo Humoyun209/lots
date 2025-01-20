@@ -43,6 +43,14 @@ async def process_start(message: Message):
         await asyncio.sleep(60)
 
 
+@dp.message(Command(commands=["delete"]))
+async def process_delete(message: Message, bot: Bot):
+    delete_msg = await message.answer("Удаление...")
+    db.delete_all_data()
+    await bot.delete_message(chat_id=message.chat.id, message_id=delete_msg.message_id)
+    await message.answer("Данные удалены")
+
+
 @dp.message()
 async def get_echo(message: Message):
     await message.answer("Бот ничего не понимает")

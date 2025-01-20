@@ -56,6 +56,16 @@ class DataBase:
             else:
                 return HasLot(has=False, is_changed=False)
 
+    def delete_all_data(self):
+        with self.connect:
+            self.cursor.executescript(
+                """BEGIN TRANSACTION;
+                DELETE FROM lots;
+                DELETE FROM sqlite_sequence WHERE name = 'lots';
+                COMMIT;"""
+            )
+            self.connect.commit()
+
     def insert_lots(self):
         lots = self.get_lots_json()
         new_lots: list[Lot] = []
